@@ -1,7 +1,6 @@
 //Imports de los módulos
 const fs = require("fs/promises");
 const path = require("path");
-let userss = require("./users.json");
 
 const readFileUsers = async () => {
     //Imprimir en consola el arreglo de usuarios
@@ -30,17 +29,13 @@ const addUser = async (username) => {
     const reqpath = path.resolve("users.json");
     try {
         let users = await fs.readFile(reqpath, "utf8");
-        userss.push(username);
-        let string = userss.toString();
-        const resultado = `[${string}]`;
-        console.log(`[${string}]`);
-        await fs.writeFile(reqpath, resultado);
+        const usersObj = JSON.parse(users); //Convierte de JSON a objeto
+        usersObj.push(username);
+        await fs.writeFile(reqpath, JSON.stringify(usersObj)); //convierte de objeto a string
     } catch (error) {
         console.log(error);
     }
 };
-addUser()
-//No hace falta ejecutar las funciones
 
 module.exports = {
     readFileUsers,
